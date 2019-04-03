@@ -20,3 +20,12 @@ var j: number = 12;
   let my_name: string = "Kitety"
   let my_name1: string = "Kitety1"
 }
+
+// Array
+{
+  let myArr1: (number | string)[] = [1, 2, '']
+  let myArr2: (number)[] = [1, 2, 3]
+  let myArr3: Array<number | boolean> = [1, 2, 3, false];
+  myArr3.push(12)
+  myArr3 = []
+}
