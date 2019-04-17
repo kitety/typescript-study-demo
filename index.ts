@@ -25,7 +25,37 @@ var j: number = 12;
 {
   let myArr1: (number | string)[] = [1, 2, '']
   let myArr2: (number)[] = [1, 2, 3]
-  let myArr3: Array<number | boolean> = [1, 2, 3, false];
+  let myArr3: Array<number | boolean> = [1, 2, 3, false, 4];
   myArr3.push(12)
+  // 赋值就不用定义类型,因为声明的时候定义了
+  let popElement = myArr3.pop()
   myArr3 = []
 }
+// tuple
+{
+  let tuple1: [string, number, boolean] = ['string', 1, false]
+  // 在后面可以追加，但是要是前面已经有了的类型，强而且不能插入，
+  // 前面的几个类型必须满足，顺序要固定
+  tuple1.push(2)
+  // tuple1.push([])
+  // tuple1=[]
+  // console.log(tuple1)
+}
+// function
+// 加问号可传可不传
+function add(a: number, b?: number = 20, ): number {
+  if (!b) {
+    b = 0
+  }
+  return a + b;
+}
+console.log(add(45))
+
+// ...rest 扩充其他的元素
+function sum(a: number, b: number, ...rest: number[]): number {
+  // a+b为初始值
+  let restAll: number = rest.reduce((total, num) => (total + num), a + b)
+  return restAll
+}
+console.log(sum(45, 1, 2, 3, 4, 5, 6))
+

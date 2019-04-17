@@ -21,7 +21,40 @@ var j = 12;
 {
     var myArr1 = [1, 2, ''];
     var myArr2 = [1, 2, 3];
-    var myArr3 = [1, 2, 3, false];
+    var myArr3 = [1, 2, 3, false, 4];
     myArr3.push(12);
+    // 赋值就不用定义类型,因为声明的时候定义了
+    var popElement = myArr3.pop();
     myArr3 = [];
 }
+// tuple
+{
+    var tuple1 = ['string', 1, false];
+    // 在后面可以追加，但是要是前面已经有了的类型，强而且不能插入，
+    // 前面的几个类型必须满足，顺序要固定
+    tuple1.push(2);
+    // tuple1.push([])
+    // tuple1=[]
+    // console.log(tuple1)
+}
+// function
+// 加问号可传可不传
+function add(a, b) {
+    if (b === void 0) { b = 20; }
+    if (!b) {
+        b = 0;
+    }
+    return a + b;
+}
+console.log(add(45));
+// ...rest 扩充其他的元素
+function sum(a, b) {
+    var rest = [];
+    for (var _i = 2; _i < arguments.length; _i++) {
+        rest[_i - 2] = arguments[_i];
+    }
+    // a+b为初始值
+    var restAll = rest.reduce(function (total, num) { return (total + num); }, a + b);
+    return restAll;
+}
+console.log(sum(45, 1, 2, 3, 4, 5, 6));
