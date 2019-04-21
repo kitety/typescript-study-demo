@@ -58,3 +58,27 @@ function sum(a, b) {
     return restAll;
 }
 console.log(sum(45, 1, 2, 3, 4, 5, 6));
+// any
+{
+    // 慎用
+    var a_1;
+    a_1 = 10;
+    a_1 = 'String';
+    a_1 = [1, 23, 456];
+    var log = function (value) {
+        if (typeof value === 'number') {
+            return "Your number is " + value;
+        }
+        else if (typeof value === 'string') {
+            return "Your string is " + value;
+        }
+        else {
+            throw new Error("Expected string or number,but get " + value + ".");
+        }
+    };
+    console.log(log('qqq'));
+    var c_1;
+    // 报错
+    // c=12;
+    c_1 = [1, [], 1, 'Hello'];
+}

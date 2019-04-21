@@ -43,7 +43,7 @@ var j: number = 12;
 }
 // function
 // 加问号可传可不传
-function add(a: number, b?: number = 20, ): number {
+function add(a: number, b: number = 20, ): number {
   if (!b) {
     b = 0
   }
@@ -59,3 +59,25 @@ function sum(a: number, b: number, ...rest: number[]): number {
 }
 console.log(sum(45, 1, 2, 3, 4, 5, 6))
 
+// any
+{
+  // 慎用
+  let a: any;
+  a = 10;
+  a = 'String';
+  a = [1, 23, 456]
+  const log = (value: any) => {
+    if (typeof value === 'number') {
+      return `Your number is ${value}`
+    } else if (typeof value === 'string') {
+      return `Your string is ${value}`
+    } else {
+      throw new Error(`Expected string or number,but get ${value}.`)
+    }
+  }
+  console.log(log('qqq'))
+  let c:any[];
+  // 报错
+  // c=12;
+  c=[1,[],1,'Hello']
+}
