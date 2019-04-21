@@ -58,6 +58,16 @@ function sum(a, b) {
     return restAll;
 }
 console.log(sum(45, 1, 2, 3, 4, 5, 6));
+// 联合类型
+function isNumber(value) {
+    // ts对应的类型判断
+    // 可以进行进一步处理
+    return typeof value === 'number';
+}
+console.log(1111, isNumber('11'));
+function isString(value) {
+    return typeof value === 'string';
+}
 // any
 {
     // 慎用
@@ -66,10 +76,10 @@ console.log(sum(45, 1, 2, 3, 4, 5, 6));
     a_1 = 'String';
     a_1 = [1, 23, 456];
     var log = function (value) {
-        if (typeof value === 'number') {
+        if (isNumber(value)) {
             return "Your number is " + value;
         }
-        else if (typeof value === 'string') {
+        else if (isString(value)) {
             return "Your string is " + value;
         }
         else {
@@ -81,4 +91,20 @@ console.log(sum(45, 1, 2, 3, 4, 5, 6));
     // 报错
     // c=12;
     c_1 = [1, [], 1, 'Hello'];
+}
+// 联合类型
+{
+    var log = function (value) {
+        if (isNumber(value)) {
+            return "Your number is " + value;
+        }
+        else if (isString(value)) {
+            return "Your string is " + value;
+        }
+        else {
+            // throw new Error(`Expected string or number,but get ${value}.`)
+        }
+    };
+    // 这样的话TS都会直接报错
+    console.log(22, log(null));
 }

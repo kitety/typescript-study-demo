@@ -59,6 +59,16 @@ function sum(a: number, b: number, ...rest: number[]): number {
 }
 console.log(sum(45, 1, 2, 3, 4, 5, 6))
 
+// 联合类型
+function isNumber(value: any): value is number {
+  // ts对应的类型判断
+  // 可以进行进一步处理
+  return typeof value === 'number'
+}
+console.log(1111, isNumber('11'))
+function isString(value: any): value is string {
+  return typeof value === 'string'
+}
 // any
 {
   // 慎用
@@ -67,17 +77,32 @@ console.log(sum(45, 1, 2, 3, 4, 5, 6))
   a = 'String';
   a = [1, 23, 456]
   const log = (value: any) => {
-    if (typeof value === 'number') {
+    if (isNumber(value)) {
       return `Your number is ${value}`
-    } else if (typeof value === 'string') {
+    } else if (isString(value)) {
       return `Your string is ${value}`
     } else {
       throw new Error(`Expected string or number,but get ${value}.`)
     }
   }
   console.log(log('qqq'))
-  let c:any[];
+  let c: any[];
   // 报错
   // c=12;
-  c=[1,[],1,'Hello']
+  c = [1, [], 1, 'Hello']
 }
+// 联合类型
+{
+  const log = (value: string | number | null | undefined) => {
+    if (isNumber(value)) {
+      return `Your number is ${value}`
+    } else if (isString(value)) {
+      return `Your string is ${value}`
+    } else {
+      // throw new Error(`Expected string or number,but get ${value}.`)
+    }
+  }
+  // 这样的话TS都会直接报错
+  console.log(22, log(null))
+}
+
