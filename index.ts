@@ -104,5 +104,80 @@ function isString(value: any): value is string {
   }
   // 这样的话TS都会直接报错
   console.log(22, log(null))
+  // 还有--strictNullChecks 在编译的时候null只能归于null,undefined只能归于undefined
+}
+// class
+/* class模板 数据data 行为action */
+{
+  class Person {
+    // 定义数据
+    firstName: string;
+    lastName: string;
+    age: number;
+  }
+  let aPerson = new Person()
+  // 设置内容
+  aPerson.firstName = 'Kitety'
+  aPerson.age = 23
+  console.log(aPerson.firstName);
+
+  class Movie {
+    name: string;
+    play_count: number
+    time: number
+    // this指向生成的对象自身
+    constructor(name: string, play_count: number, time: number) {
+      this.name = name
+      this.play_count = play_count
+    }
+    // 可能对数据进行操作
+    display_play_count(padding?: string) {
+      if (padding) {
+        return `${this.play_count} 次 ${padding}`
+      }
+      return `${this.play_count} 次`
+    }
+    // 对数据进行操作
+    increse_play_count() {
+      this.play_count += 1
+    }
+  }
+  // 声称对象
+  let movie = new Movie('电影', 15, 87)
+  movie.name = 'Avengers'
+  console.log(movie.display_play_count());
+  movie.increse_play_count()
+  console.log(movie.display_play_count());
+}
+// 继承和多态
+{
+  class Person {
+    // 定义数据
+    firstName: string;
+    lastName: string;
+    age: number;
+    greet() {
+      console.log('hi!');
+    }
+    otherGreet() {
+      this.greet()
+    }
+  }
+  class Programmer extends Person {
+    greet() {
+      console.log('hello world!');
+    }
+    // super 代表父类
+    greetLikeNormalPerson() {
+      super.greet()
+    }
+  }
+  // class 作为类型
+  let aPerson: Person = new Person()
+  let aProgrammer: Programmer = new Programmer()
+  // 设置内容
+  aPerson.greet()
+  aProgrammer.greet()
+  aProgrammer.greetLikeNormalPerson()
 }
 

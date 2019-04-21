@@ -1,3 +1,16 @@
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 // var fn = () => 'Hello'
 var a = 13;
 var b = true;
@@ -107,4 +120,79 @@ function isString(value) {
     };
     // 这样的话TS都会直接报错
     console.log(22, log(null));
+    // 还有--strictNullChecks 在编译的时候null只能归于null,undefined只能归于undefined
+}
+// class
+/* class模板 数据data 行为action */
+{
+    var Person = /** @class */ (function () {
+        function Person() {
+        }
+        return Person;
+    }());
+    var aPerson = new Person();
+    // 设置内容
+    aPerson.firstName = 'Kitety';
+    aPerson.age = 23;
+    console.log(aPerson.firstName);
+    var Movie = /** @class */ (function () {
+        // this指向生成的对象自身
+        function Movie(name, play_count, time) {
+            this.name = name;
+            this.play_count = play_count;
+        }
+        // 可能对数据进行操作
+        Movie.prototype.display_play_count = function (padding) {
+            if (padding) {
+                return this.play_count + " \u6B21 " + padding;
+            }
+            return this.play_count + " \u6B21";
+        };
+        // 对数据进行操作
+        Movie.prototype.increse_play_count = function () {
+            this.play_count += 1;
+        };
+        return Movie;
+    }());
+    // 声称对象
+    var movie = new Movie('电影', 15, 87);
+    movie.name = 'Avengers';
+    console.log(movie.display_play_count());
+    movie.increse_play_count();
+    console.log(movie.display_play_count());
+}
+// 继承和多态
+{
+    var Person = /** @class */ (function () {
+        function Person() {
+        }
+        Person.prototype.greet = function () {
+            console.log('hi!');
+        };
+        Person.prototype.otherGreet = function () {
+            this.greet();
+        };
+        return Person;
+    }());
+    var Programmer = /** @class */ (function (_super) {
+        __extends(Programmer, _super);
+        function Programmer() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        Programmer.prototype.greet = function () {
+            console.log('hello world!');
+        };
+        // super 代表父类
+        Programmer.prototype.greetLikeNormalPerson = function () {
+            _super.prototype.greet.call(this);
+        };
+        return Programmer;
+    }(Person));
+    // class 作为类型
+    var aPerson = new Person();
+    var aProgrammer = new Programmer();
+    // 设置内容
+    aPerson.greet();
+    aProgrammer.greet();
+    aProgrammer.greetLikeNormalPerson();
 }
