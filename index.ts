@@ -180,4 +180,117 @@ function isString(value: any): value is string {
   aProgrammer.greet()
   aProgrammer.greetLikeNormalPerson()
 }
+// 成员可见性
+{
+  // 如果不写的话就默认public
+  class Person {
+    // 定义数据
+    private firstName: string;
+    private lastName: string;
+    private age: number;
+    public greet() {
+      console.log('hi!');
+    }
+    public getFirstName() {
+      return this.firstName
+    }
+    private sayHi() {
+      console.log('private say hi!');
+    }
+    public sayHiOut() {
+      this.sayHi()
+    }
+    public setFirstName(name: string) {
+      this.firstName = name
+    }
+    public otherGreet() {
+      this.greet()
+    }
+  }
+  // 1.public
+
+  // class Programmer extends Person {
+  //   public greet() {
+  //     console.log('hello world!');
+  //   }
+  //   // super 代表父类
+  //   public greetLikeNormalPerson() {
+  //     super.greet()
+  //   }
+  // }
+  // // class 作为类型
+  // let aPerson: Person = new Person()
+  // let aProgrammer: Programmer = new Programmer()
+  // // 设置内容
+  // aPerson.greet()
+  // aProgrammer.greet()
+  // aProgrammer.greetLikeNormalPerson()
+
+  // 2.private
+
+  let aPerson = new Person()
+  // 错误,只能在class Person内部使用
+  console.log(aPerson.setFirstName('Kitety'));
+  console.log(aPerson.getFirstName());
+  aPerson.sayHiOut()
+}
+// protected
+{
+  // 如果不写的话就默认public
+  class Person {
+    // 定义数据
+    protected firstName: string;
+    protected lastName: string;
+    private age: number;
+    public greet() {
+      console.log('hi!');
+    }
+    public getFirstName() {
+      return this.firstName
+    }
+    private sayHi() {
+      console.log('private say hi!');
+    }
+    public sayHiOut() {
+      this.sayHi()
+    }
+    public setFirstName(name: string) {
+      this.firstName = name
+    }
+    public otherGreet() {
+      this.greet()
+    }
+  }
+  class Programmer extends Person {
+    public greet() {
+      console.log('hello world!');
+    }
+    // super 代表父类
+    public greetLikeNormalPerson() {
+      super.greet()
+    }
+    public showName() {
+      return this.firstName
+    }
+    public setName(name: string) {
+      this.firstName = name
+    }
+  }
+  // class 作为类型
+  let aPerson: Person = new Person()
+  let aProgrammer: Programmer = new Programmer()
+  // 报错
+  // console.log(aProgrammer.firstName);
+  aProgrammer.setName('kitety')
+  console.log(aProgrammer.showName());
+  // 继承也会继承私有属性
+  // console.log(aProgrammer.age);
+  /**
+   * public任何属性和方法都可以在子类 实例调用,默认是这个
+   * protected 任何属性和方法都可以在子类调用,
+   * private 任何属性和方法在本类调用
+   * 注意在调用的时候,可以通过相关的public函数来调用使用受限制的函数private/protected,比如内置get/set函数等等
+   * 继承的时候相关的属性都会继承
+   */
+}
 

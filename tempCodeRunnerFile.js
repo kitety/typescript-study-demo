@@ -1,0 +1,2 @@
+
+    aPerson.greet();
