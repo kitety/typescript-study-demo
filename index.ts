@@ -240,6 +240,8 @@ function isString(value: any): value is string {
   class Person {
     // 定义数据
     protected firstName: string;
+    // 这样的话在子类不能使用
+    // private lastName: string;
     protected lastName: string;
     private age: number;
     public greet() {
@@ -274,7 +276,15 @@ function isString(value: any): value is string {
     }
     public setName(name: string) {
       this.firstName = name
+      // this.lastName = 'lastName' + name
     }
+    public getFullName(): string {
+      return this.firstName + this.lastName
+    }
+    // 这种方式还是不行的 会直接报错
+    // public getSuperFirstName():string{
+    //   return super.firstName
+    // }
   }
   // class 作为类型
   let aPerson: Person = new Person()
@@ -282,7 +292,11 @@ function isString(value: any): value is string {
   // 报错
   // console.log(aProgrammer.firstName);
   aProgrammer.setName('kitety')
+  console.log(aProgrammer.getFullName());
   console.log(aProgrammer.showName());
+  // 测试是不行的
+  // console.log('使用super来测试父类的private',aProgrammer.getSuperFirstName())
+
   // 继承也会继承私有属性
   // console.log(aProgrammer.age);
   /**
@@ -291,6 +305,40 @@ function isString(value: any): value is string {
    * private 任何属性和方法在本类调用
    * 注意在调用的时候,可以通过相关的public函数来调用使用受限制的函数private/protected,比如内置get/set函数等等
    * 继承的时候相关的属性都会继承
+   * 大概的范围 public > protected > private
+   */
+}
+// 对protect的修饰
+{
+  class Person {
+    protected firstName: string;
+    protected lastName: string;
+    public greet() {
+      console.log('hi!');
+    }
+    // protected constructor就会出现错误,并且子类继承生成实例也会报错
+    // private的话子类就直接不能使用super
+    protected constructor(firstName: string, lastName: string) {
+      this.firstName = firstName
+      this.lastName = lastName
+    }
+  }
+  // protected constructor就会出现错误,并且子类继承生成实例也会报错
+  // 除非子类重写constructor
+  class Programmer extends Person {
+    public constructor(firstName: string, lastName: string) {
+      // 调用父类构造函数的方法
+      super(firstName, lastName)
+      console.log('programer constructor')
+    }
+  }
+  // protected constructor就会出现错误,并且子类继承生成实例也会报错
+  // let per = new Person('hello', 'kitety')
+  let pro = new Programmer('hello', 'kitety')
+  /**
+   * public 默认,子类可用
+   * protected 子类可重写contructor配合super使用
+   * private 子类不可用
    */
 }
 

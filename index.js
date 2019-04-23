@@ -289,6 +289,10 @@ function isString(value) {
         };
         Programmer.prototype.setName = function (name) {
             this.firstName = name;
+            // this.lastName = 'lastName' + name
+        };
+        Programmer.prototype.getFullName = function () {
+            return this.firstName + this.lastName;
         };
         return Programmer;
     }(Person));
@@ -298,7 +302,10 @@ function isString(value) {
     // 报错
     // console.log(aProgrammer.firstName);
     aProgrammer.setName('kitety');
+    console.log(aProgrammer.getFullName());
     console.log(aProgrammer.showName());
+    // 测试是不行的
+    // console.log('使用super来测试父类的private',aProgrammer.getSuperFirstName())
     // 继承也会继承私有属性
     // console.log(aProgrammer.age);
     /**
@@ -307,5 +314,42 @@ function isString(value) {
      * private 任何属性和方法在本类调用
      * 注意在调用的时候,可以通过相关的public函数来调用使用受限制的函数private/protected,比如内置get/set函数等等
      * 继承的时候相关的属性都会继承
+     * 大概的范围 public > protected > private
+     */
+}
+// 对protect的修饰
+{
+    var Person = /** @class */ (function () {
+        // protected constructor就会出现错误,并且子类继承生成实例也会报错
+        // private的话子类就直接不能使用super
+        function Person(firstName, lastName) {
+            this.firstName = firstName;
+            this.lastName = lastName;
+        }
+        Person.prototype.greet = function () {
+            console.log('hi!');
+        };
+        return Person;
+    }());
+    // protected constructor就会出现错误,并且子类继承生成实例也会报错
+    // 除非子类重写constructor
+    var Programmer = /** @class */ (function (_super) {
+        __extends(Programmer, _super);
+        function Programmer(firstName, lastName) {
+            var _this = 
+            // 调用父类构造函数的方法
+            _super.call(this, firstName, lastName) || this;
+            console.log('programer constructor');
+            return _this;
+        }
+        return Programmer;
+    }(Person));
+    // protected constructor就会出现错误,并且子类继承生成实例也会报错
+    // let per = new Person('hello', 'kitety')
+    var pro = new Programmer('hello', 'kitety');
+    /**
+     * public 默认,子类可用
+     * protected 子类可重写contructor配合super使用
+     * private 子类不可用
      */
 }
