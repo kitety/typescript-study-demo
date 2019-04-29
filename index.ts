@@ -634,3 +634,50 @@ function isString(value: any): value is string {
   let b1: Person = newBoss;
   let b2: Boss = newBoss;
 }
+// 接口继承类
+{
+  class Component {
+    private weight: number;
+    private height: number;
+    constructor(weight: number, height: number) {
+      this.weight = weight;
+      this.height = height;
+    }
+    display(): void {
+      console.log(this.weight, this.height);
+    }
+  }
+  // 接口继承类
+  // 继承方法和属性，但是可以不用实现方法
+  // 可以定义方法和属性
+  interface Widget extends Component {
+    size: number;
+    hide(): void;
+  }
+  class Button extends Component implements Widget {
+    size: number = 12;
+    hide(): void {
+      console.log("hide");
+    }
+  }
+  let w: Widget = new Button(1, 2);
+  w.display();
+}
+// Indexable Types
+{
+  interface States {
+    // 中括号代表索引
+    // 这里的index可以更改 类型为string或者number
+    [index: string]: boolean;
+  }
+  let s1: States = {
+    state: false,
+    able: true
+  };
+  // console.log(s);
+  interface States1 {
+    [index: number]: boolean;
+  }
+  let s2: States1 = [false, true];
+  console.log(s2);
+}

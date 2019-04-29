@@ -610,3 +610,39 @@ function isString(value) {
     var b1 = newBoss;
     var b2 = newBoss;
 }
+// 接口继承类
+{
+    var Component = /** @class */ (function () {
+        function Component(weight, height) {
+            this.weight = weight;
+            this.height = height;
+        }
+        Component.prototype.display = function () {
+            console.log(this.weight, this.height);
+        };
+        return Component;
+    }());
+    var Button = /** @class */ (function (_super) {
+        __extends(Button, _super);
+        function Button() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.size = 12;
+            return _this;
+        }
+        Button.prototype.hide = function () {
+            console.log("hide");
+        };
+        return Button;
+    }(Component));
+    var w = new Button(1, 2);
+    w.display();
+}
+// Indexable Types
+{
+    var s1 = {
+        state: false,
+        able: true
+    };
+    var s2 = [false, true];
+    console.log(s2);
+}
