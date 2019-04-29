@@ -14,6 +14,15 @@ npm install -g typescript
 ```bash
 tsc index.ts -w
 ```
+同步执行
+---
+```
+// 全局安装nodemon
+npm i -g nodemon
+//运行
+nodemon index.js
+
+```
 
 
 

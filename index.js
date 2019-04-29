@@ -411,6 +411,202 @@ function isString(value) {
     }());
     var aPerson = new Person();
     // 会报错，只读属性
-    aPerson.name = "hello";
+    // aPerson.name = "hello";
     console.log(aPerson.name);
+}
+// 枚举类型
+{
+    // 取出的对应的值是number
+    var DaysOfTheWeek = void 0;
+    (function (DaysOfTheWeek) {
+        // 可以设置默认初始值，默认从0开始
+        DaysOfTheWeek[DaysOfTheWeek["SUN"] = 120] = "SUN";
+        DaysOfTheWeek[DaysOfTheWeek["MON"] = 121] = "MON";
+        DaysOfTheWeek[DaysOfTheWeek["TUE"] = 122] = "TUE";
+        DaysOfTheWeek[DaysOfTheWeek["WEN"] = 123] = "WEN";
+        DaysOfTheWeek[DaysOfTheWeek["THU"] = 124] = "THU";
+        DaysOfTheWeek[DaysOfTheWeek["FRI"] = 125] = "FRI";
+        DaysOfTheWeek[DaysOfTheWeek["SAT"] = 126] = "SAT";
+    })(DaysOfTheWeek || (DaysOfTheWeek = {}));
+    var day = void 0;
+    day = DaysOfTheWeek.FRI;
+    // 5
+    console.log(typeof day, day);
+}
+// 接口
+// 规定了规范
+{
+    // 只要o有name就可以使用
+    // o可以是一个接口类型，o要有name属性
+    var sayName = function (o) {
+        // console.log(o.name);
+        // o.print(o.name)
+    };
+    var person = {
+        name: "Hello person",
+        age: 7,
+        print: function (name) {
+            console.log("name");
+        }
+    };
+    var bottle = {
+        litres: 1,
+        name: "漂流瓶",
+        print: function (name) {
+            console.log("name");
+        }
+    };
+    var Person = /** @class */ (function () {
+        function Person() {
+        }
+        Person.prototype.print = function (name) {
+            console.log("name");
+        };
+        return Person;
+    }());
+    var p = new Person();
+    p.name = "pp";
+    /**
+     * duck typing
+     * 有name属性，name他可以打印；看起来像鸭子，就是鸭子
+     */
+    sayName(person);
+    sayName(bottle);
+    sayName(p);
+}
+// 类型别名
+{
+    var my_name = "hello";
+    var obj = {
+        name: "obj",
+        age: 27
+    };
+    // 另一种形式
+    var user = {
+        name: "obj",
+        age: 27
+    };
+    // 装饰器可以叠加
+    var iUser = {
+        name: "kitety",
+        age: 13,
+        email: "aizaizuori@gmail.com"
+    };
+}
+// 类实现接口
+{
+    // 类实现接口
+    var Employee = /** @class */ (function () {
+        function Employee() {
+        }
+        Employee.prototype.greet = function () {
+            console.log(this.name);
+        };
+        return Employee;
+    }());
+    // 用接口，用类，都是可以的
+    var em1 = new Employee();
+    var em2 = new Employee();
+    // 真正的支付接口
+    var do_pay = function (pay) {
+        pay.post();
+    };
+    var WePay = /** @class */ (function () {
+        function WePay() {
+        }
+        WePay.prototype.post = function () { };
+        return WePay;
+    }());
+    var AliPay = /** @class */ (function () {
+        function AliPay() {
+        }
+        AliPay.prototype.post = function () { };
+        return AliPay;
+    }());
+    var we = new WePay();
+    var ali = new AliPay();
+    // 调用支付
+    do_pay(we);
+    do_pay(ali);
+}
+// 类型断言
+{
+    var M = /** @class */ (function () {
+        function M() {
+        }
+        return M;
+    }());
+    var m = new M();
+    // m.first_name='111';
+    var printCount = function (m) {
+        return m.count;
+    };
+    printCount(m);
+    printCount({ count: 22, first_name: "hello" });
+    // 这句会报错
+    // 加了[propName: string]: any;就不会
+    printCount({ count: 22, name: "money", first_name: "hello" });
+    // 类型断言
+    printCount({ count: 22, name: "money", first_name: "hello" });
+}
+// 接口中的函数
+{
+    var call = void 0;
+    call = function (success) {
+        // do something
+    };
+}
+// 类型断言
+{
+    var x = "1111111111111";
+    // x是任何类型，编译器不能明确
+    // <string>明确一下
+    var b_1 = x.substring(0, 3);
+    // 没有发生类型转换
+    var b1 = x;
+    console.log(b_1, typeof b1);
+    function getLen(something) {
+        /**
+         * something,length在编译的时候就会报错
+         * 所以转换一下类型
+         */
+        var s = something;
+        if (s.length) {
+            return s.length;
+        }
+        else {
+            return s.toString().length;
+        }
+    }
+    console.log(getLen(12));
+    // 下面两种方式都可以
+    var p = {};
+    p.age = 27;
+    p.name = "类型断言";
+    // 另一种方式
+    var p1 = {
+        age: 27,
+        name: "类型断言"
+    };
+}
+// 继承和实现多个接口
+{
+    var p = {
+        name: "kitety",
+        age: 27
+    };
+    // 类不能有多个类，不能有多个父类
+    // 但是可以实现多个接口
+    // 每个属性都要实现
+    var NewBoss = /** @class */ (function () {
+        function NewBoss() {
+        }
+        return NewBoss;
+    }());
+    var newBoss = {
+        name: "kitety",
+        email: "aizaizuori@gmail.com"
+    };
+    var b1 = newBoss;
+    var b2 = newBoss;
 }

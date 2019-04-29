@@ -389,6 +389,248 @@ function isString(value: any): value is string {
   }
   let aPerson = new Person();
   // 会报错，只读属性
-  aPerson.name = "hello";
+  // aPerson.name = "hello";
   console.log(aPerson.name);
+}
+// 枚举类型
+{
+  // 取出的对应的值是number
+  enum DaysOfTheWeek {
+    // 可以设置默认初始值，默认从0开始
+    SUN = 120,
+    MON,
+    TUE,
+    WEN,
+    THU,
+    FRI,
+    SAT
+  }
+  let day: DaysOfTheWeek;
+  day = DaysOfTheWeek.FRI;
+  // 5
+  console.log(typeof day, day);
+}
+// 接口
+// 规定了规范
+{
+  // 接口
+  // 名称不分大小写
+  interface INamed {
+    name: string;
+    // 方法 无方法体
+    print(name: string): void;
+  }
+  // 只要o有name就可以使用
+  // o可以是一个接口类型，o要有name属性
+  const sayName = (o: INamed) => {
+    // console.log(o.name);
+    // o.print(o.name)
+  };
+  const person = {
+    name: "Hello person",
+    age: 7,
+    print: function(name: string): void {
+      console.log("name");
+    }
+  };
+  const bottle = {
+    litres: 1,
+    name: "漂流瓶",
+    print: (name: string): void => {
+      console.log("name");
+    }
+  };
+  class Person {
+    name: string;
+    print(name: string): void {
+      console.log("name");
+    }
+  }
+  let p = new Person();
+  p.name = "pp";
+  /**
+   * duck typing
+   * 有name属性，name他可以打印；看起来像鸭子，就是鸭子
+   */
+  sayName(person);
+  sayName(bottle);
+  sayName(p);
+}
+// 类型别名
+{
+  // 定义类型别名
+  type Name = string;
+  let my_name: Name = "hello";
+  // console.log(my_name);
+  type User = {
+    name: string;
+    age?: number;
+  };
+  let obj: User = {
+    name: "obj",
+    age: 27
+  };
+  // 另一种形式
+  let user: { name: string; age: number } = {
+    name: "obj",
+    age: 27
+  };
+  // type 和 interface很像
+  interface IUser {
+    name: string;
+    // 加个？表示可传可不传
+    age?: number;
+    paint?(): void;
+  }
+  interface IUser {
+    email: string;
+  }
+  // 装饰器可以叠加
+  let iUser: IUser = {
+    name: "kitety",
+    age: 13,
+    email: "aizaizuori@gmail.com"
+  };
+}
+// 类实现接口
+{
+  interface Person {
+    name: string;
+    greet(): void;
+  }
+  // 类实现接口
+  class Employee implements Person {
+    name: string;
+    greet(): void {
+      console.log(this.name);
+    }
+  }
+  // 用接口，用类，都是可以的
+  let em1: Employee = new Employee();
+  let em2: Person = new Employee();
+  // 例子 支付
+  interface Pay {
+    post(): void;
+  }
+  // 真正的支付接口
+  const do_pay = (pay: Pay) => {
+    pay.post();
+  };
+  class WePay implements Pay {
+    post() {}
+  }
+  class AliPay implements Pay {
+    post() {}
+  }
+
+  let we: Pay = new WePay();
+  let ali: Pay = new AliPay();
+  // 调用支付
+  do_pay(we);
+  do_pay(ali);
+}
+// 类型断言
+{
+  // 类型断言
+  interface Money {
+    count: number;
+    [propName: string]: any;
+    // 只读
+    readonly first_name: string;
+  }
+  class M implements Money {
+    count: number;
+    first_name: string;
+  }
+  let m: Money = new M();
+  // m.first_name='111';
+  const printCount = (m: Money) => {
+    return m.count;
+  };
+  printCount(m);
+  printCount({ count: 22, first_name: "hello" });
+  // 这句会报错
+  // 加了[propName: string]: any;就不会
+  printCount({ count: 22, name: "money", first_name: "hello" });
+  // 类型断言
+  printCount({ count: 22, name: "money", first_name: "hello" } as Money);
+}
+// 接口中的函数
+{
+  interface Callback {
+    // 简单理解为匿名函数
+    (success: boolean): void;
+  }
+  let call: Callback;
+  call = (success: boolean): void => {
+    // do something
+  };
+}
+// 类型断言
+{
+  let x: any = "1111111111111";
+  // x是任何类型，编译器不能明确
+  // <string>明确一下
+  let b: string = (<string>x).substring(0, 3);
+  // 没有发生类型转换
+  let b1 = <number>x;
+  console.log(b, typeof b1);
+  function getLen(something: number | string): number {
+    /**
+     * something,length在编译的时候就会报错
+     * 所以转换一下类型
+     */
+    let s = <string>something;
+    if (s.length) {
+      return s.length;
+    } else {
+      return s.toString().length;
+    }
+  }
+  console.log(getLen(12));
+
+  // 更好明确类型和类型里面的结构
+
+  interface Person {
+    name: string;
+    age: number;
+  }
+  // 下面两种方式都可以
+  let p = {} as Person;
+  p.age = 27;
+  p.name = "类型断言";
+  // 另一种方式
+  let p1 = <Person>{
+    age: 27,
+    name: "类型断言"
+  };
+}
+// 继承和实现多个接口
+{
+  interface Person {
+    name: string;
+  }
+  interface Boss {
+    email: string;
+  }
+  interface Programmer extends Person {
+    age: number;
+  }
+  let p: Programmer = {
+    name: "kitety",
+    age: 27
+  };
+  // 类不能有多个类，不能有多个父类
+  // 但是可以实现多个接口
+  // 每个属性都要实现
+  class NewBoss implements Person, Boss {
+    name: string;
+    email: string;
+  }
+  let newBoss: NewBoss = {
+    name: "kitety",
+    email: "aizaizuori@gmail.com"
+  };
+  let b1: Person = newBoss;
+  let b2: Boss = newBoss;
 }
