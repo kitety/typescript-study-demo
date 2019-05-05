@@ -643,6 +643,103 @@ function isString(value) {
         state: false,
         able: true
     };
+    // 没有数组的方法和属性
     var s2 = [false, true];
-    console.log(s2);
+    var s3 = [true, false];
+    console.log(s3.length);
+    s3.push(false);
+    s3.pop();
+    console.log(s3);
+    var s4 = {
+        mainScreen: true,
+        mainScreen1: true
+    };
+    s4["hello"] = false;
+    var em1 = {
+        color: "red",
+        nest: {
+            color1: {
+                color: "red",
+                nest: {
+                    color1: {
+                        color: "red"
+                    }
+                }
+            }
+        }
+    };
+}
+// 列表数据
+// interface Or class
+{
+    var Todo1 = /** @class */ (function () {
+        function Todo1() {
+        }
+        return Todo1;
+    }());
+    var s = [
+        {
+            userId: 1,
+            id: 1,
+            title: "delectus aut autem",
+            completed: false
+        },
+        {
+            userId: 1,
+            id: 2,
+            title: "quis ut nam facilis et officia qui",
+            completed: false
+        }
+    ];
+}
+// 抽象类
+// 抽象属性，抽象方法
+{
+    var Person = /** @class */ (function () {
+        function Person(name) {
+            this.name = name;
+        }
+        Person.prototype.display = function () {
+            console.log("dispaly");
+        };
+        return Person;
+    }());
+    // 抽象类不能创建实例
+    // let p = new Person("kitety");
+    var Employee_1 = /** @class */ (function (_super) {
+        __extends(Employee, _super);
+        function Employee(name, code) {
+            var _this = _super.call(this, name) || this;
+            _this.code = code;
+            return _this;
+        }
+        Employee.prototype.find = function (name) {
+            return new Employee(name, this.code);
+        };
+        return Employee;
+    }(Person));
+    // 继承之后就可以使用
+    var p = new Employee_1("kitety", "well done");
+    console.log(p.find("haha"));
+}
+// parameter properties
+{
+    var Person = /** @class */ (function () {
+        function Person(name, age) {
+            this._name = name;
+            this._age = age;
+        }
+        return Person;
+    }());
+    // 另一种方式
+    var Person2 = /** @class */ (function () {
+        function Person2(name, age) {
+            this.name = name;
+            this.age = age;
+        }
+        return Person2;
+    }());
+    var p = new Person("kitety", 29);
+    var p2 = new Person2("kitety", 29);
+    console.log(p);
 }

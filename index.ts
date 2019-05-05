@@ -667,7 +667,7 @@ function isString(value: any): value is string {
 {
   interface States {
     // 中括号代表索引
-    // 这里的index可以更改 类型为string或者number
+    // 这里的index可以更改 类型为string或者number,只有这两种类型
     [index: string]: boolean;
   }
   let s1: States = {
@@ -678,6 +678,139 @@ function isString(value: any): value is string {
   interface States1 {
     [index: number]: boolean;
   }
+  // 没有数组的方法和属性
   let s2: States1 = [false, true];
-  console.log(s2);
+
+  // 这里会报错没有长度。长度只有数组才有，同时一些数组的方法也不能用
+  // 这就是s2:boolean[]=[false,true]的区别
+  // console.log(s2, s2.length);
+
+  // 处理
+  // 自己直接定义方法
+  interface State2 {
+    [index: number]: boolean;
+    length: number;
+    push(p: boolean): void;
+    pop(): boolean;
+  }
+  let s3: State2 = [true, false];
+  console.log(s3.length);
+  s3.push(false);
+  s3.pop();
+  console.log(s3);
+
+  interface State3 {
+    // 类型注意要一致
+    [index: string]: boolean;
+    // 指定属性
+    mainScreen: boolean;
+  }
+  let s4: State3 = {
+    mainScreen: true,
+    mainScreen1: true
+  };
+  s4["hello"] = false;
+
+  // 复杂结构
+  interface NestCss {
+    color: string;
+    nest?: {
+      // 递归
+      [select: string]: NestCss;
+    };
+  }
+  let em1: NestCss = {
+    color: "red",
+    nest: {
+      color1: {
+        color: "red",
+        nest: {
+          color1: {
+            color: "red"
+          }
+        }
+      }
+    }
+  };
+}
+// 列表数据
+// interface Or class
+{
+  interface Todo {
+    userId: number;
+    id: number;
+    title: string;
+    completed: boolean;
+  }
+  class Todo1 {
+    userId: number;
+    id: number;
+    title: string;
+    completed: boolean;
+  }
+  let s: Todo1[] = [
+    {
+      userId: 1,
+      id: 1,
+      title: "delectus aut autem",
+      completed: false
+    },
+    {
+      userId: 1,
+      id: 2,
+      title: "quis ut nam facilis et officia qui",
+      completed: false
+    }
+  ];
+}
+// 抽象类
+// 抽象属性，抽象方法
+{
+  abstract class Person {
+    name: string;
+    constructor(name: string) {
+      this.name = name;
+    }
+    display(): void {
+      console.log("dispaly");
+    }
+    // 抽象方法，无方法体
+    abstract find(string): Person;
+    abstract age: number;
+  }
+  // 抽象类不能创建实例
+  // let p = new Person("kitety");
+
+  class Employee extends Person {
+    code: string;
+    age: number;
+    constructor(name: string, code: string) {
+      super(name); //必须调用父类
+      this.code = code;
+    }
+    find(name: string): Person {
+      return new Employee(name, this.code);
+    }
+  }
+  // 继承之后就可以使用
+  let p: Employee = new Employee("kitety", "well done");
+  console.log(p.find("haha"));
+}
+// parameter properties
+{
+  class Person {
+    private _name: string;
+    private _age: number;
+    constructor(name: string, age: number) {
+      this._name = name;
+      this._age = age;
+    }
+  }
+  // 另一种方式
+  class Person2 {
+    constructor(private name: string, private age: number) {}
+  }
+  let p: Person = new Person("kitety", 29);
+  let p2: Person2 = new Person2("kitety", 29);
+  console.log(p);
 }
