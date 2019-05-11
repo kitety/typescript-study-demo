@@ -814,3 +814,91 @@ function isString(value: any): value is string {
   let p2: Person2 = new Person2("kitety", 29);
   console.log(p);
 }
+// accessors getters setters
+{
+  class Person {
+    private _name: string;
+    age: number;
+    constructor(name: string, age: number) {
+      this._name = name;
+      this.age = age;
+    }
+    getName(): string {
+      return this._name;
+    }
+    setName(name: string): void {
+      this._name = name;
+    }
+    // 重点
+    get name(): string {
+      return this._name;
+    }
+    // 这个地方不加返回类型
+    set name(name: string) {
+      this._name = name;
+    }
+  }
+  let p: Person = new Person("kitety", 29);
+  p.name = "hello1";
+  // p.setName("hello");
+  console.log(p.getName());
+}
+{
+  class Rect {
+    private w: number;
+    private h: number;
+    constructor(w: number, h: number) {
+      this.w = w;
+      this.h = h;
+    }
+    getArea() {
+      // 这里要用箭头函数才能绑定this
+      // 或者在这里定义变量，传递进去
+      // function()..的话就不会传递this
+      // this是指向这个对象，还是调用者的上下文
+      return (): number => {
+        return this.w * this.h;
+      };
+    }
+  }
+  let r: Rect = new Rect(2, 3);
+  console.log(r.getArea()());
+}
+// 五种定义函数类型的方法
+{
+  // 1
+  let a: any;
+  a = function(): void {
+    console.log("1");
+  };
+
+  function fun(): any {
+    return function(): void {
+      console.log("1");
+    };
+  }
+  // 2
+  let c: Function;
+  c = function(): void {
+    console.log("2");
+  };
+
+  // 3
+  let d: (para: string) => string;
+  d = (para: string) => {
+    return para;
+  };
+
+  // 4 类型别名
+  type e = (para: string) => string;
+  let f: e;
+  f = (para: string) => {
+    return para;
+  };
+
+  // 5 interface
+  interface g {
+    (para: string): string;
+  }
+  const h: g = (para: string) => para;
+}

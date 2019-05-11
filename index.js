@@ -743,3 +743,84 @@ function isString(value) {
     var p2 = new Person2("kitety", 29);
     console.log(p);
 }
+// accessors getters setters
+{
+    var Person = /** @class */ (function () {
+        function Person(name, age) {
+            this._name = name;
+            this.age = age;
+        }
+        Person.prototype.getName = function () {
+            return this._name;
+        };
+        Person.prototype.setName = function (name) {
+            this._name = name;
+        };
+        Object.defineProperty(Person.prototype, "name", {
+            // 重点
+            get: function () {
+                return this._name;
+            },
+            // 这个地方不加返回类型
+            set: function (name) {
+                this._name = name;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        return Person;
+    }());
+    var p = new Person("kitety", 29);
+    p.name = "hello1";
+    // p.setName("hello");
+    console.log(p.getName());
+}
+{
+    var Rect = /** @class */ (function () {
+        function Rect(w, h) {
+            this.w = w;
+            this.h = h;
+        }
+        Rect.prototype.getArea = function () {
+            var _this = this;
+            // 这里要用箭头函数才能绑定this
+            // 或者在这里定义变量，传递进去
+            // function()..的话就不会传递this
+            // this是指向这个对象，还是调用者的上下文
+            return function () {
+                return _this.w * _this.h;
+            };
+        };
+        return Rect;
+    }());
+    var r = new Rect(2, 3);
+    console.log(r.getArea()());
+}
+// 五种定义函数类型的方法
+{
+    // 1
+    var a_2;
+    a_2 = function () {
+        console.log("1");
+    };
+    function fun() {
+        return function () {
+            console.log("1");
+        };
+    }
+    // 2
+    var c_2;
+    c_2 = function () {
+        console.log("2");
+    };
+    // 3
+    var d = void 0;
+    d = function (para) {
+        return para;
+    };
+    var f = void 0;
+    f = function (para) {
+        return para;
+    };
+    var h = function (para) { return para; };
+}
