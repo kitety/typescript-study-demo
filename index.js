@@ -824,3 +824,116 @@ function isString(value) {
     };
     var h = function (para) { return para; };
 }
+// 函数重载
+// 允许用相同的名字，不同的参数来创造多个函数
+{
+    // 以上两种的组合实现
+    function sumM(x, y, z) {
+        // console.log(typeof z);
+        if (typeof z === "undefined") {
+            return x + y;
+        }
+        return x + y + z;
+    }
+    function divide(x, y) {
+        if (typeof x === "number") {
+            return x / y;
+        }
+        else if (typeof x === "string") {
+            return [x.substring(0, y), x.substring(y)];
+        }
+    }
+    // console.log(divide("hello",2));
+    // 在class中函数重载
+    var Util = /** @class */ (function () {
+        function Util() {
+        }
+        Util.divide = function (x, y) {
+            if (typeof x === "number") {
+                return x / y;
+            }
+            else if (typeof x === "string") {
+                return [x.substring(0, y), x.substring(y)];
+            }
+        };
+        return Util;
+    }());
+    // let util1=new Util();
+    // console.log(Util.divide(6, 2));
+}
+// type guards
+{
+    function show(x) {
+        console.log(typeof x);
+        if (typeof x === "number") {
+            console.log("a number");
+        }
+        else {
+            console.log("a string");
+        }
+    }
+    // show(12);
+    var Person = /** @class */ (function () {
+        function Person() {
+        }
+        return Person;
+    }());
+    var p = new Person();
+    console.log(typeof p); //object
+    console.log(typeof new String("string")); //object
+    // 很多类型的子类型
+    console.log(typeof undefined); //undefined
+    console.log(typeof null); //object
+    var Car_1 = /** @class */ (function () {
+        function Car() {
+        }
+        Car.prototype.start = function () {
+            console.log("Car starting");
+        };
+        Car.prototype.drive = function () {
+            console.log("Car driving");
+        };
+        return Car;
+    }());
+    var Bike = /** @class */ (function () {
+        function Bike() {
+        }
+        Bike.prototype.start = function () {
+            console.log("Bike starting");
+        };
+        Bike.prototype.ride = function () {
+            console.log("Bike driving");
+        };
+        return Bike;
+    }());
+    // vehicle is Car 判断的意思 断言；这里用boolean就是不对的，在函数主题调用会报错
+    // boolean返回值发挥的作用是在运行时
+    // vehicle is Car发挥在编译时期
+    function isCar(vehicle) {
+        return vehicle.drive !== undefined;
+    }
+    // 跟之前的类型断言一样
+    function Move(vehicle) {
+        vehicle.start();
+        // 方法1
+        // if ((vehicle as Car).drive) {
+        //   (vehicle as Car).drive();
+        // } else {
+        //   (vehicle as Bike).ride();
+        // }
+        // 方法2
+        // if (isCar(vehicle)) {
+        //   vehicle.drive();
+        // } else {
+        //   vehicle.ride();
+        // }
+        // 方法3 这个比较好
+        if (vehicle instanceof Car_1) {
+            vehicle.drive();
+        }
+        else {
+            vehicle.ride();
+        }
+    }
+    Move(new Bike());
+}

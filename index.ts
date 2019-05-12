@@ -902,3 +902,113 @@ function isString(value: any): value is string {
   }
   const h: g = (para: string) => para;
 }
+// 函数重载
+// 允许用相同的名字，不同的参数来创造多个函数
+{
+  // 1.函数名相同，参数名不同
+  // 定义未实现的参数列表
+  function sumM(x: number, y: number): number;
+  function sumM(x: number, y: number, z: number): number;
+  // 以上两种的组合实现
+  function sumM(x: number, y: number, z?: number): number {
+    // console.log(typeof z);
+    if (typeof z === "undefined") {
+      return x + y;
+    }
+    return x + y + z;
+  }
+  // console.log(sumM(1,2,3));
+
+  function divide(x: number, y: number): number;
+  function divide(x: string, y: number): string[];
+  function divide(x: any, y: number): any {
+    if (typeof x === "number") {
+      return x / y;
+    } else if (typeof x === "string") {
+      return [x.substring(0, y), x.substring(y)];
+    }
+  }
+  // console.log(divide("hello",2));
+
+  // 在class中函数重载
+  class Util {
+    // 静态方法
+    static divide(x: number, y: number): number;
+    static divide(x: string, y: number): string[];
+    static divide(x: any, y: number): any {
+      if (typeof x === "number") {
+        return x / y;
+      } else if (typeof x === "string") {
+        return [x.substring(0, y), x.substring(y)];
+      }
+    }
+  }
+  // let util1=new Util();
+  // console.log(Util.divide(6, 2));
+}
+// type guards
+{
+  function show(x: string | number) {
+    console.log(typeof x);
+    if (typeof x === "number") {
+      console.log("a number");
+    } else {
+      console.log("a string");
+    }
+  }
+  // show(12);
+
+  class Person {}
+  let p = new Person();
+  console.log(typeof p); //object
+  console.log(typeof new String("string")); //object
+  // 很多类型的子类型
+  console.log(typeof undefined); //undefined
+  console.log(typeof null); //object
+
+  class Car {
+    start() {
+      console.log("Car starting");
+    }
+    drive() {
+      console.log("Car driving");
+    }
+  }
+  class Bike {
+    start() {
+      console.log("Bike starting");
+    }
+    ride() {
+      console.log("Bike driving");
+    }
+  }
+  // vehicle is Car 判断的意思 断言；这里用boolean就是不对的，在函数主题调用会报错
+  // boolean返回值发挥的作用是在运行时
+  // vehicle is Car发挥在编译时期
+  function isCar(vehicle: Bike | Car): vehicle is Car {
+    return (vehicle as Car).drive !== undefined;
+  }
+  // 跟之前的类型断言一样
+  function Move(vehicle: Bike | Car) {
+    vehicle.start();
+    // 方法1
+    // if ((vehicle as Car).drive) {
+    //   (vehicle as Car).drive();
+    // } else {
+    //   (vehicle as Bike).ride();
+    // }
+    // 方法2
+    // if (isCar(vehicle)) {
+    //   vehicle.drive();
+    // } else {
+    //   vehicle.ride();
+    // }
+    // 方法3 这个比较好
+    if (vehicle instanceof Car) {
+      vehicle.drive();
+    } else {
+      vehicle.ride();
+    }
+  }
+  Move(new Bike());
+}
