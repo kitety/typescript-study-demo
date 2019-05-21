@@ -937,3 +937,69 @@ function isString(value) {
     }
     Move(new Bike());
 }
+/**
+ * type guards for null and undefined
+    undefined 未被初始化
+    null 当前不可用
+    null undefined这两个有自己的类型,可以赋值给很多类型，是这些类型的子类型
+    当运行tsc 加上--strictNullChecks选项，就会进行空值检查
+ */
+{
+    // x? number|undefined
+    function show1(x) {
+        if (x === undefined) {
+            console.log("x is not set");
+        }
+        else if (x === null) {
+            console.log("x is null");
+        }
+        else {
+            console.log("x is number");
+        }
+    }
+    var x = 10;
+    var y = void 0;
+    var z = null;
+    var z1 = undefined;
+    show1(x);
+    show1(y);
+    show1(z);
+}
+// 非空操作符
+{
+    // 但是执行strictNullChecks空检查会报错
+    function splitInHalf(str) {
+        var checkString = function () {
+            if (str === null || str === undefined) {
+                str = "test";
+            }
+        };
+        checkString();
+        // str! 代表str不能为空
+        // strictNullChecks可以过
+        return str.substring(0, str.length / 2);
+    }
+    var s = splitInHalf("hello");
+    console.log(s);
+}
+/**
+ never类型
+ 可以简单的理解为类型为空，代码可能继续进行；但是never：无限循环和抛出异常就不能继续进行
+ void 有返回值，期待返回
+ never没有返回，不期待返回
+ */
+{
+    function sayHi() {
+        console.log("hi");
+    }
+    // 无限循环
+    function loopForever() {
+        //  无限循环
+        while (true) { }
+    }
+    // 异常
+    function throwError($msg) {
+        throw new Error($msg);
+    }
+    var s = sayHi();
+}
