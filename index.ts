@@ -429,7 +429,7 @@ function isString(value: any): value is string {
   const person = {
     name: "Hello person",
     age: 7,
-    print: function(name: string): void {
+    print: function (name: string): void {
       console.log("name");
     }
   };
@@ -517,10 +517,10 @@ function isString(value: any): value is string {
     pay.post();
   };
   class WePay implements Pay {
-    post() {}
+    post() { }
   }
   class AliPay implements Pay {
-    post() {}
+    post() { }
   }
 
   let we: Pay = new WePay();
@@ -808,7 +808,7 @@ function isString(value: any): value is string {
   }
   // 另一种方式
   class Person2 {
-    constructor(private name: string, private age: number) {}
+    constructor(private name: string, private age: number) { }
   }
   let p: Person = new Person("kitety", 29);
   let p2: Person2 = new Person2("kitety", 29);
@@ -868,18 +868,18 @@ function isString(value: any): value is string {
 {
   // 1
   let a: any;
-  a = function(): void {
+  a = function (): void {
     console.log("1");
   };
 
   function fun(): any {
-    return function(): void {
+    return function (): void {
       console.log("1");
     };
   }
   // 2
   let c: Function;
-  c = function(): void {
+  c = function (): void {
     console.log("2");
   };
 
@@ -958,7 +958,7 @@ function isString(value: any): value is string {
   }
   // show(12);
 
-  class Person {}
+  class Person { }
   let p = new Person();
   console.log(typeof p); //object
   console.log(typeof new String("string")); //object
@@ -1042,7 +1042,7 @@ function isString(value: any): value is string {
 {
   // 但是执行strictNullChecks空检查会报错
   function splitInHalf(str: string | null): string {
-    let checkString = function() {
+    let checkString = function () {
       if (str === null || str === undefined) {
         str = "test";
       }
@@ -1056,7 +1056,7 @@ function isString(value: any): value is string {
   console.log(s);
 }
 /**
- never类型
+ never类型=>无限循环/抛出异常
  可以简单的理解为类型为空，代码可能继续进行；但是never：无限循环和抛出异常就不能继续进行
  void 有返回值，期待返回
  never没有返回，不期待返回
@@ -1068,11 +1068,154 @@ function isString(value: any): value is string {
   // 无限循环
   function loopForever(): never {
     //  无限循环
-    while (true) {}
+    while (true) { }
   }
   // 异常
   function throwError($msg: string): never {
     throw new Error($msg);
   }
   let s: void = sayHi();
+}
+/**
+ * Disciminanted Unions
+ */
+{
+  class PrintA {
+    // name:string
+    // type=>字符串，标识类型
+    pageOrientation: 'landscape';
+    // 风景画
+    printLandScape(): void {
+      console.log('landscape');
+    }
+  }
+  class PrintB {
+    // name:string
+    // type=>字符串，标识类型
+    // 属性接个字符串，可以再class使用 interface使用
+    pageOrientation: 'portrait';
+    // 风景画
+    printPortrait(): void {
+      console.log('portrait');
+    }
+  }
+  function doPrint(pt: PrintA | PrintB): void {
+    if (pt.pageOrientation === 'landscape') {
+      pt.printLandScape()
+    } else if (pt.pageOrientation === 'portrait') {
+      pt.printPortrait()
+    } else {
+      let unknownPrinter: never = pt
+    }
+  }
+  // interface
+  // 神奇
+  interface FullTimeEmployee {
+    emeType: "FullType"
+    name: string
+    annualSalary: number
+  }
+  interface PartTimeEmployee {
+    emeType: "PartTime"
+    name: string
+    daySalary: number
+  }
+  interface ContractEmployee {
+    emeType: "contract"
+    name: string
+    hourSalary: number
+  }
+  type Employee = FullTimeEmployee | PartTimeEmployee | ContractEmployee
+  function getEmployeeSalary(emp: Employee) {
+    switch (emp.emeType) {
+      case 'FullType':
+        return emp.annualSalary
+      case 'PartTime':
+        return emp.daySalary
+      default:
+        return emp.hourSalary
+    }
+  }
+  let con: ContractEmployee = {
+    emeType: "contract",
+    name: 'kitety',
+    hourSalary: 13
+  }
+  console.log(getEmployeeSalary(con));
+}
+// 泛型 generics
+// 可以再任何类型发挥作用，而不仅仅限于一种类型
+// 与C#的泛型很像
+{
+  function getArray(items: any[]): any[] {
+    return new Array().concat(items)
+  }
+  let a1 = getArray([1, 2, 3])
+  let a2 = getArray(['1', '2', '3'])
+  a1.push('4')
+  a2.push(4)
+  // 类型的不确定性
+  console.log(a1, a2);
+}
+/**
+ * 泛型解决问题
+ * 泛型：类型占位符号
+ */
+{
+  // 可以用很多类型来代替T
+  function getArrayN<T>(items: T[]): T[] {
+    return new Array<T>().concat(items)
+  }
+  // function getArrayN<T, U>(items: T[], name?: U): T[] {
+  //   return new Array<T>().concat(items)
+  // }
+  let a1: number[] = getArrayN<number>([1, 2, 3])
+  let a2: string[] = getArrayN<string>(['1', '2', '3'])
+  // 不推荐
+  let a3 = getArrayN(['1', '2', '3'])
+
+
+  // 下面会报错
+  // a1.push('4')
+  // a2.push(4)
+  // 当不传递类型的时候，会推断出相应的类型，因此下面的会报错
+  // a3.push(4)
+}
+/**在class使用泛型 */
+{
+  // T 任何类型
+  class List<T>{
+    private data: T[];
+    constructor(ele: T[]) {
+      this.data = ele
+    }
+    add(t: T) {
+      this.data.push(t)
+    }
+    remove(t: T) {
+      let index = this.data.indexOf(t);
+      if (index > -1) {
+        this.data.splice(index, 1)
+      }
+    }
+    asArray(): T[] {
+      return this.data
+    }
+  }
+  let numbers = new List<number>([1, 2])
+  console.log(numbers);
+  class Pair<T, S>{
+    private _first: T;
+    private _second: S;
+    constructor(first: T, second: S) {
+      this._first = first
+      this._second = second
+    }
+    get first(): T {
+      return this._first
+    }
+    get second(): S {
+      return this._second
+    }
+  }
 }

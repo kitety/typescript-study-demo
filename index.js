@@ -983,7 +983,7 @@ function isString(value) {
     console.log(s);
 }
 /**
- never类型
+ never类型=>无限循环/抛出异常
  可以简单的理解为类型为空，代码可能继续进行；但是never：无限循环和抛出异常就不能继续进行
  void 有返回值，期待返回
  never没有返回，不期待返回
@@ -1002,4 +1002,135 @@ function isString(value) {
         throw new Error($msg);
     }
     var s = sayHi();
+}
+/**
+ * Disciminanted Unions
+ */
+{
+    var PrintA = /** @class */ (function () {
+        function PrintA() {
+        }
+        // 风景画
+        PrintA.prototype.printLandScape = function () {
+            console.log('landscape');
+        };
+        return PrintA;
+    }());
+    var PrintB = /** @class */ (function () {
+        function PrintB() {
+        }
+        // 风景画
+        PrintB.prototype.printPortrait = function () {
+            console.log('portrait');
+        };
+        return PrintB;
+    }());
+    function doPrint(pt) {
+        if (pt.pageOrientation === 'landscape') {
+            pt.printLandScape();
+        }
+        else if (pt.pageOrientation === 'portrait') {
+            pt.printPortrait();
+        }
+        else {
+            var unknownPrinter = pt;
+        }
+    }
+    function getEmployeeSalary(emp) {
+        switch (emp.emeType) {
+            case 'FullType':
+                return emp.annualSalary;
+            case 'PartTime':
+                return emp.daySalary;
+            default:
+                return emp.hourSalary;
+        }
+    }
+    var con = {
+        emeType: "contract",
+        name: 'kitety',
+        hourSalary: 13
+    };
+    console.log(getEmployeeSalary(con));
+}
+// 泛型 generics
+// 可以再任何类型发挥作用，而不仅仅限于一种类型
+// 与C#的泛型很像
+{
+    function getArray(items) {
+        return new Array().concat(items);
+    }
+    var a1 = getArray([1, 2, 3]);
+    var a2 = getArray(['1', '2', '3']);
+    a1.push('4');
+    a2.push(4);
+    // 类型的不确定性
+    console.log(a1, a2);
+}
+/**
+ * 泛型解决问题
+ * 泛型：类型占位符号
+ */
+{
+    // 可以用很多类型来代替T
+    function getArrayN(items) {
+        return new Array().concat(items);
+    }
+    // function getArrayN<T, U>(items: T[], name?: U): T[] {
+    //   return new Array<T>().concat(items)
+    // }
+    var a1 = getArrayN([1, 2, 3]);
+    var a2 = getArrayN(['1', '2', '3']);
+    // 不推荐
+    var a3 = getArrayN(['1', '2', '3']);
+    // 下面会报错
+    // a1.push('4')
+    // a2.push(4)
+    // 当不传递类型的时候，会推断出相应的类型，因此下面的会报错
+    // a3.push(4)
+}
+/**在class使用泛型 */
+{
+    // T 任何类型
+    var List = /** @class */ (function () {
+        function List(ele) {
+            this.data = ele;
+        }
+        List.prototype.add = function (t) {
+            this.data.push(t);
+        };
+        List.prototype.remove = function (t) {
+            var index = this.data.indexOf(t);
+            if (index > -1) {
+                this.data.splice(index, 1);
+            }
+        };
+        List.prototype.asArray = function () {
+            return this.data;
+        };
+        return List;
+    }());
+    var numbers = new List([1, 2]);
+    console.log(numbers);
+    var Pair = /** @class */ (function () {
+        function Pair(first, second) {
+            this._first = first;
+            this._second = second;
+        }
+        Object.defineProperty(Pair.prototype, "first", {
+            get: function () {
+                return this._first;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(Pair.prototype, "second", {
+            get: function () {
+                return this._second;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        return Pair;
+    }());
 }
