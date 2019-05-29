@@ -1134,3 +1134,39 @@ function isString(value) {
         return Pair;
     }());
 }
+// 泛型在函数中使用
+{
+    var Pair = /** @class */ (function () {
+        function Pair(first, second) {
+            this.first = first;
+            this.second = second;
+        }
+        return Pair;
+    }());
+    // Pair<F, S>[]== Array<Pair<F, S>>
+    function getFirstArray(pairs) {
+        var arr = [];
+        for (var i = 0; i < pairs.length; i++) {
+            var element = pairs[i].first;
+            arr.push(element);
+        }
+        return arr;
+    }
+    var numberArray = [
+        new Pair(12, false),
+        new Pair(1, true)
+    ];
+    console.log(getFirstArray(numberArray));
+    // 函数类型
+    function findFirst(items, searchFunction) {
+        for (var i = 0; i < items.length; i++) {
+            var item = items[i];
+            if (searchFunction(item)) {
+                return item;
+            }
+        }
+        return null;
+    }
+    var items = [1, 2, 3];
+    console.log(findFirst(items, function (t) { return t % 2 === 0; }));
+}

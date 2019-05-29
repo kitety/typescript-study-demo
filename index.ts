@@ -1219,3 +1219,40 @@ function isString(value: any): value is string {
     }
   }
 }
+// 泛型在函数中使用
+{
+  class Pair<F, S>{
+    first: F;
+    second: S;
+    constructor(first: F, second: S) {
+      this.first = first
+      this.second = second
+    }
+  }
+  // Pair<F, S>[]== Array<Pair<F, S>>
+  function getFirstArray<F, S>(pairs: Pair<F, S>[]): F[] {
+    let arr: F[] = []
+    for (let i = 0; i < pairs.length; i++) {
+      const element = pairs[i].first;
+      arr.push(element)
+    }
+    return arr
+  }
+  let numberArray: Pair<number, boolean>[] = [
+    new Pair<number, boolean>(12, false),
+    new Pair<number, boolean>(1, true)
+  ]
+  console.log(getFirstArray(numberArray));
+  // 函数类型
+  function findFirst<T>(items: T[], searchFunction: (t: T) => boolean): T {
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      if (searchFunction(item)) {
+        return item
+      }
+    }
+    return null
+  }
+  let items: number[] = [1, 2, 3]
+  console.log(findFirst<number>(items, (t: number) => t % 2 === 0));
+}
