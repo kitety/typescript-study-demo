@@ -11,6 +11,17 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 // var fn = () => 'Hello'
 var a = 13;
 var b = true;
@@ -1169,4 +1180,123 @@ function isString(value) {
     }
     var items = [1, 2, 3];
     console.log(findFirst(items, function (t) { return t % 2 === 0; }));
+}
+/**
+ * 在接口中使用泛型
+ */
+{
+    var p = {
+        first: 1,
+        second: 'hello'
+    };
+    var c_3 = {
+        id: Math.random().toString(36),
+        run: function () {
+            return Math.random();
+        }
+    };
+    function checkElementFun(items, toBeChecked, atIndex) {
+        return items[atIndex] === toBeChecked;
+    }
+    var checker = checkElementFun;
+    var items = [1, 2, 3, 4];
+    console.log(checker(items, 2, 1));
+}
+/**
+ * 索引接口补充
+ */
+{
+    var s = {
+        'enable': false
+    };
+    console.log(s.enable);
+    var S1 = {
+        enable: {
+            first: 1,
+            second: false
+        },
+        break: {
+            first: 2,
+            second: false
+        }
+    };
+}
+/**
+ * 泛型面向对象
+ */
+{
+    var List = /** @class */ (function () {
+        function List(ele) {
+            this.data = [];
+            this.data = ele;
+        }
+        List.prototype.add = function (t) {
+            this.data.push(t);
+        };
+        List.prototype.remove = function (t) {
+            var index = this.data.indexOf(t);
+            if (index > -1) {
+                this.data.splice(index, 1);
+            }
+        };
+        List.prototype.asArray = function () {
+            return this.data;
+        };
+        return List;
+    }());
+    // let numbers:Collection<number>=new List<number>([1,2,3])
+    // numbers.add(23)
+    // numbers.remove(2)
+    // console.log(numbers.asArray());
+    // 类继承类
+    var BookList = /** @class */ (function (_super) {
+        __extends(BookList, _super);
+        function BookList() {
+            return _super !== null && _super.apply(this, arguments) || this;
+        }
+        return BookList;
+    }(List));
+    var bookList = new BookList(['hello']);
+}
+/**
+ * 扩展运算符
+ */
+{
+    function foo(s, y, z) {
+        console.log(s, y, z);
+    }
+    function foo1() {
+        var x = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            x[_i] = arguments[_i];
+        }
+        console.log(JSON.stringify(x));
+    }
+    var arr = [1, 2, 3];
+    // foo.apply(null, arr)
+    // foo.call(null, ...arr)
+    // 方法1：断言
+    foo.apply(void 0, arr);
+    // 方法2: 别的方式
+    foo1.apply(void 0, arr);
+    function foo2(x, y, z) {
+        console.log(x, y, z);
+    }
+    foo2.apply(void 0, arr);
+    foo2(1, 2, 3);
+    // 解构
+    {
+        var _a = [1, 2, 3, 4, 5, 6], x = _a[0], y = _a[1], z = _a.slice(2);
+        console.log(x, y, z);
+        var list = [1, 2];
+        list = list.concat([3, 4]);
+        console.log(list);
+    }
+    // 对象
+    var print2D = { x: 1, y: 2, z: 56 };
+    var print3D = __assign({}, print2D, { z: 3 });
+    var print3D1 = __assign({ z: 3 }, print2D);
+    // 位置不同，结果不同，后面覆盖前面的
+    console.log(print3D);
+    console.log(print3D1);
 }

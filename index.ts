@@ -1256,3 +1256,156 @@ function isString(value: any): value is string {
   let items: number[] = [1, 2, 3]
   console.log(findFirst<number>(items, (t: number) => t % 2 === 0));
 }
+/**
+ * 在接口中使用泛型
+ */
+{
+  interface Pair<T, S> {
+    first: T
+    second: S
+  }
+  let p: Pair<number, string> = {
+    first: 1,
+    second: 'hello'
+  }
+  // console.log(p);
+  interface Command<T, S> {
+    id: T
+    run(): S
+  }
+  let c: Command<string, number> = {
+    id: Math.random().toString(36),
+    run: function (): number {
+      return Math.random()
+    }
+  }
+  // console.log(c.id);
+  // console.log(c.run());
+
+
+  // 带接口泛型的匿名函数
+  interface checkElement {
+    // 匿名函数
+    <T>(items: T[], toBeChecked: T, atIndex: number): boolean
+  }
+  function checkElementFun<T>(items: T[], toBeChecked: T, atIndex: number): boolean {
+    return items[atIndex] === toBeChecked
+  }
+  let checker: checkElement = checkElementFun
+  let items = [1, 2, 3, 4]
+  console.log(checker<number>(items, 2, 1));
+}
+/**
+ * 索引接口补充
+ */
+{
+  interface State<R> {
+    [state: string]: R
+  }
+  let s: State<boolean> = {
+    'enable': false
+  }
+  console.log(s.enable);
+  interface Pair<T, S> {
+    first: T
+    second: S
+  }
+  interface States<T, S> {
+    [state: string]: Pair<T, S>
+  }
+  let S1: States<number, boolean> = {
+    enable: {
+      first: 1,
+      second: false
+    },
+    break: {
+      first: 2,
+      second: false
+    }
+  }
+}
+/**
+ * 泛型面向对象
+ */
+{
+  interface Collection<T> {
+    add(t: T): void
+    remove(t: T): void
+    asArray(): T[]
+  }
+  // 接口继承
+  interface Collection1<T> extends Collection<T> {
+    getElement(index: number): T
+  }
+
+  class List<T> implements Collection<T> {
+    private data: T[] = [];
+    constructor(ele: T[]) {
+      this.data = ele
+    }
+    add(t: T): void {
+      this.data.push(t)
+    }
+    remove(t: T): void {
+      let index = this.data.indexOf(t);
+      if (index > -1) {
+        this.data.splice(index, 1)
+      }
+    }
+    asArray(): T[] {
+      return this.data
+    }
+  }
+  // let numbers:Collection<number>=new List<number>([1,2,3])
+  // numbers.add(23)
+  // numbers.remove(2)
+  // console.log(numbers.asArray());
+
+  // 类继承类
+  class BookList<T> extends List<T>{
+  }
+  let bookList: BookList<string> = new BookList<string>(['hello'])
+}
+/**
+ * 扩展运算符
+ */
+{
+  function foo(s: number, y: number, z: number) {
+    console.log(s, y, z);
+  }
+  function foo1(...x: number[]) {
+    console.log(JSON.stringify(x));
+  }
+
+  let arr: number[] = [1, 2, 3];
+  // foo.apply(null, arr)
+  // foo.call(null, ...arr)
+
+  // 方法1：断言
+  (<any>foo)(...arr)
+  // 方法2: 别的方式
+  foo1(...arr)
+  // 方法3：函数重载
+  function foo2(...args: number[]): void;
+  function foo2(x: number, y: number, z: number) {
+    console.log(x, y, z);
+  }
+  foo2(...arr)
+  foo2(1, 2, 3)
+
+  // 解构
+  {
+    let [x, y, ...z] = [1, 2, 3, 4, 5, 6]
+    console.log(x, y, z);
+    let list = [1, 2]
+    list = [...list, 3, 4]
+    console.log(list);
+  }
+  // 对象
+  let print2D = { x: 1, y: 2, z: 56 }
+  let print3D = { ...print2D, z: 3 }
+  let print3D1 = { z: 3, ...print2D }
+  // 位置不同，结果不同，后面覆盖前面的
+  console.log(print3D);
+  console.log(print3D1);
+}
