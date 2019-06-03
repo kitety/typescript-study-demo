@@ -1409,3 +1409,88 @@ function isString(value: any): value is string {
   console.log(print3D);
   console.log(print3D1);
 }
+// key of
+// 当需要的时候帮助我们用正确的属性名称
+{
+  class A {
+    x: number = 5
+  }
+  // 只能是A的属性名，而且要是字符串
+  let y: keyof A;
+  y = 'x';
+  function getProp(a: keyof A, test: A) {
+    return test[a]
+  }
+  let tempA: A = new A()
+  console.log(getProp('x', tempA))
+
+  class B {
+    y: keyof A;
+    getAProp(a: A): any {
+      return a[this.y]
+    }
+  }
+  let b: B = new B();
+  b.y = 'x'
+  console.log(b.getAProp(new A()));
+}
+/**
+ * 泛型的约束
+ */
+{
+  interface Shape {
+    draw(): void
+  }
+  function drawShape<S extends Shape>(shapes: S[]): void {
+    shapes.forEach(shape => shape.draw())
+  }
+  class Circle implements Shape {
+    draw(): void {
+      console.log('Circle');
+    }
+  }
+  class Rectangle implements Shape {
+    draw(): void {
+      console.log('Rectangle');
+    }
+  }
+  let circle: Circle = new Circle()
+  let rectangle: Rectangle = new Rectangle()
+  drawShape([circle, rectangle])
+
+  // K keyof T,extends=>K是T的键组成的obj/class
+  function getPropB<T, K extends keyof T>(key: K, obj: T): any {
+    return obj[key];
+  }
+  let obj = { a: 2, b: 3 }
+  getPropB('a', obj)
+}
+// 另外一种
+{
+  // new () => T 有构造函数,空括号代表没有传入任何参数
+  function createInstance<T>(t: new () => T): T {
+    return new t()
+  }
+  class Test {
+    x: number = 4
+  }
+
+  let test: Test = new Test()
+  let test1: Test = createInstance<Test>(Test)
+
+  // 有参数的
+  function createInstance2<T>(t: new (...constructorArgs: any[]) => T, ...args: any[]): T {
+    return new t(args)
+  }
+  class Test2 {
+    x: number = 4
+    y: number
+    constructor(y: number) {
+      this.y = y
+    }
+  }
+  let test3: Test = new Test()
+  // new Test2(2)
+  let test4: Test = createInstance2<Test2>(Test2, 2)
+}
+

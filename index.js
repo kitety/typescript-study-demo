@@ -1300,3 +1300,98 @@ function isString(value) {
     console.log(print3D);
     console.log(print3D1);
 }
+// key of
+// 当需要的时候帮助我们用正确的属性名称
+{
+    var A = /** @class */ (function () {
+        function A() {
+            this.x = 5;
+        }
+        return A;
+    }());
+    // 只能是A的属性名，而且要是字符串
+    var y = void 0;
+    y = 'x';
+    function getProp(a, test) {
+        return test[a];
+    }
+    var tempA = new A();
+    console.log(getProp('x', tempA));
+    var B = /** @class */ (function () {
+        function B() {
+        }
+        B.prototype.getAProp = function (a) {
+            return a[this.y];
+        };
+        return B;
+    }());
+    var b_2 = new B();
+    b_2.y = 'x';
+    console.log(b_2.getAProp(new A()));
+}
+/**
+ * 泛型的约束
+ */
+{
+    function drawShape(shapes) {
+        shapes.forEach(function (shape) { return shape.draw(); });
+    }
+    var Circle = /** @class */ (function () {
+        function Circle() {
+        }
+        Circle.prototype.draw = function () {
+            console.log('Circle');
+        };
+        return Circle;
+    }());
+    var Rectangle = /** @class */ (function () {
+        function Rectangle() {
+        }
+        Rectangle.prototype.draw = function () {
+            console.log('Rectangle');
+        };
+        return Rectangle;
+    }());
+    var circle = new Circle();
+    var rectangle = new Rectangle();
+    drawShape([circle, rectangle]);
+    // K keyof T,extends=>K是T的键组成的obj/class
+    function getPropB(key, obj) {
+        return obj[key];
+    }
+    var obj = { a: 2, b: 3 };
+    getPropB('a', obj);
+}
+// 另外一种
+{
+    // new () => T 有构造函数,空括号代表没有传入任何参数
+    function createInstance(t) {
+        return new t();
+    }
+    var Test = /** @class */ (function () {
+        function Test() {
+            this.x = 4;
+        }
+        return Test;
+    }());
+    var test = new Test();
+    var test1 = createInstance(Test);
+    // 有参数的
+    function createInstance2(t) {
+        var args = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            args[_i - 1] = arguments[_i];
+        }
+        return new t(args);
+    }
+    var Test2 = /** @class */ (function () {
+        function Test2(y) {
+            this.x = 4;
+            this.y = y;
+        }
+        return Test2;
+    }());
+    var test3 = new Test();
+    // new Test2(2)
+    var test4 = createInstance2(Test2, 2);
+}
