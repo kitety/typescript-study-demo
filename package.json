@@ -1,0 +1,24 @@
+{
+  "name": "TS",
+  "version": "1.0.0",
+  "description": "Typescript学习\r ===\r Ts官网\r ---\r  - https://www.typescriptlang.org/docs/index.html",
+  "main": "index.js",
+  "scripts": {
+    "start": "tsc &&node js/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kitety/typescript-study-demo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kitety/typescript-study-demo/issues"
+  },
+  "homepage": "https://github.com/kitety/typescript-study-demo#readme",
+  "dependencies": {
+    "@types/lodash": "^4.14.133",
+    "lodash": "^4.17.11"
+  }
+}

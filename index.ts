@@ -1,3 +1,4 @@
+import * as _ from 'lodash';
 // var fn = () => 'Hello'
 var a: number = 13;
 var b: boolean = true;
@@ -1551,3 +1552,8 @@ function isString(value: any): value is string {
   let c: Rectangle = drawShape12(rectangle)
 }
 
+{
+  let a=[1,2,3]
+  _.reverse(a)
+  console.log(a);
+}
