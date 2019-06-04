@@ -1493,4 +1493,61 @@ function isString(value: any): value is string {
   // new Test2(2)
   let test4: Test = createInstance2<Test2>(Test2, 2)
 }
+/**
+ * 泛型 类型别名
+ */
+{
+  type ListType<T> = { elements: T[] }
+  let elements: ListType<number> = {
+    elements: [1, 2, 3]
+  }
+  console.log(elements)
+
+  interface IItem {
+    name: string
+    price: number
+  }
+  // 前面部分和后面部分都要有,两种类型都要有的
+  type Entity<E> = { id: number } & E;
+  let itemEntity: Entity<IItem> = {
+    id: 12,
+    name: 'hello',
+    price: 12
+  }
+  console.log(itemEntity)
+}
+/**
+ * 约束补充
+ */
+{
+  interface Shape {
+    draw(): void
+  }
+  function DrawShape(shape: Shape): void {
+    shape.draw()
+  }
+  // extends 约束T
+  function drawShape12<T extends Shape>(shape: T): T {
+    shape.draw()
+    return shape
+  }
+  let a: Shape = {
+    draw: () => { }
+  }
+  drawShape12(a)
+  class Circle implements Shape {
+    draw(): void {
+      console.log('Circle');
+    }
+  }
+  class Rectangle implements Shape {
+    draw(): void {
+      console.log('Rectangle');
+    }
+  }
+  let circle: Circle = new Circle()
+  let rectangle: Rectangle = new Rectangle()
+  let b: Circle = drawShape12(circle)
+  let c: Rectangle = drawShape12(rectangle)
+}
 

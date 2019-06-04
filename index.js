@@ -1395,3 +1395,55 @@ function isString(value) {
     // new Test2(2)
     var test4 = createInstance2(Test2, 2);
 }
+/**
+ * 泛型 类型别名
+ */
+{
+    var elements = {
+        elements: [1, 2, 3]
+    };
+    console.log(elements);
+    var itemEntity = {
+        id: 12,
+        name: 'hello',
+        price: 12
+    };
+    console.log(itemEntity);
+}
+/**
+ * 约束补充
+ */
+{
+    function DrawShape(shape) {
+        shape.draw();
+    }
+    // extends 约束T
+    function drawShape12(shape) {
+        shape.draw();
+        return shape;
+    }
+    var a_3 = {
+        draw: function () { }
+    };
+    drawShape12(a_3);
+    var Circle = /** @class */ (function () {
+        function Circle() {
+        }
+        Circle.prototype.draw = function () {
+            console.log('Circle');
+        };
+        return Circle;
+    }());
+    var Rectangle = /** @class */ (function () {
+        function Rectangle() {
+        }
+        Rectangle.prototype.draw = function () {
+            console.log('Rectangle');
+        };
+        return Rectangle;
+    }());
+    var circle = new Circle();
+    var rectangle = new Rectangle();
+    var b_3 = drawShape12(circle);
+    var c_4 = drawShape12(rectangle);
+}
