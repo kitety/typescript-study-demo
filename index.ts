@@ -408,7 +408,7 @@ function isString(value: any): value is string {
   }
   let day: DaysOfTheWeek;
   day = DaysOfTheWeek.FRI;
-  // 5
+  // 125
   console.log(typeof day, day);
 }
 // 接口
